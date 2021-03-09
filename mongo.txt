@@ -1,0 +1,106 @@
+//--- voir tt les collection
+show collection
+
+// -- voir les db 
+show dbs
+
+//--- créé  une db 
+#  use myDBName
+
+//-- voir où on est 
+# db  
+
+//-- create user 
+ use myDBName
+
+//-- supperimer une db
+use myDB 
+db.dropDatabase()
+
+db.createUser({
+    user: "sosso",
+pwd: '123456789', 
+roles: ["readWrite","dbAdmin" ]
+});
+
+//--- cree une collection 
+db.createCollection('users');
+
+//--- inserer des info 
+db.users.insert( 
+    [
+    {nom : "Gherab",
+    prenom :'Sofiane',
+    age :22,
+    sexe : "homme"
+    },
+    {nom : 'Alois',
+    prenom :'Paul',
+    age :23,
+    sexe : "homme"
+    },
+    {nom : 'foungala',
+    prenom :'kouaki',
+    age :24,
+    sexe : "homme"
+    },
+    {nom : 'Annale',
+    prenom :'Lisa',
+    age :60,
+    sexe : "femme"
+    },
+    {nom : 'Hassani',
+    prenom :'Billal',
+    age :20,
+    sexe : "no-binaire"
+    }
+    ]
+);
+
+/// voir les info
+db.users.find() ;
+db.users.find().pretty()  ;
+
+
+// inserer avec un autre champe 
+
+db.users.insert(
+    [{nom : "Most",
+    prenom :'Moh',
+    sexe:"homme"
+    }])
+
+
+//-- modidier une info --> set que sofiane est un non binaire 
+
+db.users.update({prenom :"Sofiane"} ,{ $set:{ sexe: "non-binaire" }});
+
+
+// retirer
+
+db.users.update({prenom :"Sofiane"} ,{ $unset:{ sexe: 1 }});
+
+
+//--- modifuer la valeur
+db.users.update({prenom :"Sofiane"} ,{ $set:{ sexe: "23" }});
+
+
+//--- modifuer la key
+db.users.update({prenom :"Sofiane"} ,{ $rename:{ "sexe": "age" }});
+
+
+// -- supprimer  
+db.users.remove({prenom :"Sofiane"});
+
+//---- faire une recherche
+
+db.users.find({$or:[{age:23},{prenom:'Sofiane'}]}).pretty()
+db.users.find({$and:[{age:22},{prenom:'Sofiane'}]}).pretty()
+db.users.find({age:{$gt: 23}}).pretty()
+db.users.find({age:{$lt: 23}}).pretty()
+
+//-- triée 
+
+db.users.find().sort({age:1}).pretty()
+db.users.find().sort({age:-1}).pretty()
+
